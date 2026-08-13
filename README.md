@@ -1,8 +1,8 @@
-# ThreatShield: AI-Powered Malware Analysis Platform 
+# MalPulse: AI-Powered Malware Analysis Platform 
 
-**ThreatShield** is a robust and extensible malware analysis platform designed for security professionals, malware researchers, and system administrators. It combines **static** and **dynamic analysis techniques** with **machine learning** to detect, analyze, and report malicious behavior across a wide range of file formats.
+**MalPulse** is a robust and extensible malware analysis platform designed for security professionals, malware researchers, and system administrators. It combines **static** and **dynamic analysis techniques** with **machine learning** to detect, analyze, and report malicious behavior across a wide range of file formats.
 
-ThreatShield aims to simplify threat detection workflows while providing deep and explainable insights into suspicious files. Whether you are analyzing a Windows executable or a malicious macro in a document, ThreatShield delivers the tools you need.
+MalPulse aims to simplify threat detection workflows while providing deep and explainable insights into suspicious files. Whether you are analyzing a Windows executable or a malicious macro in a document, MalPulse delivers the tools you need.
 
 ---
 
@@ -10,7 +10,7 @@ ThreatShield aims to simplify threat detection workflows while providing deep an
 
 ### 1. Multi-format Support
 
-ThreatShield supports comprehensive analysis for a variety of file types, including:
+MalPulse supports comprehensive analysis for a variety of file types, including:
 
 - **PE files**: Windows executables and dynamic link libraries (`.exe`, `.dll`)
 - **PDF documents**: Scans for embedded scripts, suspicious objects, JavaScript, and obfuscation
@@ -22,7 +22,7 @@ ThreatShield supports comprehensive analysis for a variety of file types, includ
 
 ### 2. Static Analysis
 
-ThreatShield performs deep inspection of files without execution. Key static analysis capabilities include:
+MalPulse performs deep inspection of files without execution. Key static analysis capabilities include:
 
 - Header and metadata inspection
 - Disassembly and string extraction
@@ -43,28 +43,16 @@ Machine learning models are integrated to:
 - Cluster similar threats for correlation and pattern discovery
 - Provide contextual explanations for anomalies
 
-### 5. Interactive Chatbot Assistant
-
-An integrated natural language assistant enables users to:
-
-- Ask questions about a file’s behavior and components
-- Query definitions of suspicious activities
-- Receive guided summaries of analysis results
-
-### 6. Voice Assistant Integration
-
-ThreatShield supports hands-free interaction through voice commands, ideal for accessibility or multitasking in operational environments.
-
-### 7. Detailed and Visual Reports
+### 5. Detailed and Visual Reports
 
 Analysis results are compiled into structured reports, featuring all results that can be exported as professional PDF reports for documentation, audits, or sharing with stakeholders.
 
-### 8. Command-Line Interface (CLI) Tool
+### 6. Command-Line Interface (CLI) Tool
 
-ThreatShield includes a powerful CLI tool for streamlined malware analysis directly from the terminal. Key commands include:
+MalPulse includes a powerful CLI tool for streamlined malware analysis directly from the terminal. Key commands include:
 - `malware-detect <filename>`: Scans a specified file for malware and outputs a detailed report in the terminal.
 - `malware-detect`: Launches a user-friendly UI for interactive malware analysis.
-- `malware-detect --threatshield`: Opens the ThreatShield web interface in the default browser for full platform access.
+- `malware-detect --malpulse`: Opens the MalPulse web interface in the default browser for full platform access.
 
 ## To use the CLI tool
 - Download the .exe file from [here](https://drive.google.com/file/d/19X-Iz7E6sxMzCKIPbz3DusTfU6CbPqol/view?usp=sharing) 
@@ -81,38 +69,3 @@ ThreatShield includes a powerful CLI tool for streamlined malware analysis direc
 | Libraries    | [![pefile](https://img.shields.io/badge/pefile-4B8BBE?style=for-the-badge&logo=python&logoColor=white)](https://github.com/erocarrera/pefile) [![yara-python](https://img.shields.io/badge/yara--python-FF4C4C?style=for-the-badge&logo=python&logoColor=white)](https://github.com/VirusTotal/yara-python) [![langchain](https://img.shields.io/badge/langchain-006400?style=for-the-badge&logo=python&logoColor=white)](https://github.com/langchain-ai/langchain) [![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/) [![pdfminer.six](https://img.shields.io/badge/pdfminer.six-003153?style=for-the-badge&logo=python&logoColor=white)](https://github.com/pdfminer/pdfminer.six) [![python-docx](https://img.shields.io/badge/python--docx-2B579A?style=for-the-badge&logo=python&logoColor=white)](https://github.com/python-openxml/python-docx) [![TailwindCSS](https://img.shields.io/badge/tailwindcss-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/) [![shadcn/ui](https://img.shields.io/badge/shadcn--ui-1E1E1E?style=for-the-badge&logo=react&logoColor=white)](https://ui.shadcn.com/)  [![Lucide React](https://img.shields.io/badge/lucide--react-000000?style=for-the-badge&logo=react&logoColor=white)](https://lucide.dev/) |
 
 ---
-
-## Project Structure
-```
-threatshield/
-├── backend/
-│   ├── app.py
-│   ├── model.py
-│   ├── chat.py
-│   ├── report.py
-│   ├── pdf_models/
-│   └── ...
-│
-├── frontend/
-│   ├── app/
-│   ├── components/
-│   ├── lib/
-│   └── public/
-│
-├── cli_tool/
-│   ├── malware_detector/
-│   │   ├── __init__.py
-│   │   ├── cli.py
-│   │   ├── malware_detector.py
-│   │   └── ui.py
-│   ├── setup.py
-│   └── README.md
-```
----
-
-## Contributors
-
-- **Kavya Rambhia** - [GitHub Profile](https://github.com/kavya-r30)
-- **Dhruv Panchal** - [GitHub Profile](https://github.com/dhruvp18)
-- **Swayam Shah** - [GitHub Profile](https://github.com/sonu0305)
-- **Viraj Vora** - [GitHub Profile](https://github.com/viraj200524)
