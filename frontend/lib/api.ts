@@ -1,7 +1,7 @@
 import { FileType, type PEAnalysisResult, type GeneralAnalysisResult } from "./types"
 
 // Get the API base URL from environment variables
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api"
+const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL || "/api").replace(/\/$/, "")
 
 /**
  * Uploads a file for malware analysis

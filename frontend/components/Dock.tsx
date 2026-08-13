@@ -80,6 +80,7 @@ function DockItem({
 }: DockItemProps) {
   const ref = useRef<HTMLDivElement>(null)
   const centerRef = useRef<number>(0)
+  const isHovered = useMotionValue(0)
 
   useEffect(() => {
     const el = ref.current

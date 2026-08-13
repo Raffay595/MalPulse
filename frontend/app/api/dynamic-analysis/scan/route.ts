@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     const apiFormData = new FormData()
     apiFormData.append("file", file)
 
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api"
+    const apiBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || "/api").replace(/\/$/, "")
 
     const response = await fetch(`${apiBaseUrl}/analyze-dynamic`, {
       method: "POST",
