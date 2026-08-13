@@ -46,6 +46,3 @@ dependencies = [
     "python-dotenv>=1.1.0",
     "vt-py>=0.20.0",
 ]
-
-[tool.vercel]
-entrypoint = "backend.app:app"

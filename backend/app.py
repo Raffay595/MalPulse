@@ -33,13 +33,6 @@ def get_temp_dir():
     os.makedirs(d, exist_ok=True)
     return d
 
-@app.route('/', methods=['GET'])
-def root_index():
-    return jsonify({
-        'status': 'healthy',
-        'service': 'MalPulse AI-Powered Malware Analysis Platform API',
-        'version': '0.1.0'
-    })
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
