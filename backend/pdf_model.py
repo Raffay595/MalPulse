@@ -299,9 +299,10 @@ def analyze_pdf_file(pdf_path=None, output_json=False, json_output_path=None):
         print(f"Error: The file '{pdf_path}' does not exist.")
         return None
     
-    model_path = "pdf_models/model.pkl"
-    scaler_path = "pdf_models/scaler.pkl"
-    features_path = "pdf_models/top_features.pkl"
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    model_path = os.path.join(BASE_DIR, "pdf_models", "model.pkl")
+    scaler_path = os.path.join(BASE_DIR, "pdf_models", "scaler.pkl")
+    features_path = os.path.join(BASE_DIR, "pdf_models", "top_features.pkl")
     
     missing_files = []
     for path, name in [(model_path, "Model"), (scaler_path, "Scaler"), (features_path, "Features")]:

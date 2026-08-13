@@ -18,14 +18,28 @@ from .hreport import generate_human_readable_report
 from .dy import dy_file
 
 
+os.environ.setdefault('MPLCONFIGDIR', os.path.join(tempfile.gettempdir(), 'matplotlib'))
+os.environ.setdefault('JOBLIB_TEMP_FOLDER', os.path.join(tempfile.gettempdir(), 'joblib'))
+
 # Vercel Flask entrypoint instance
 app = Flask(__name__)
 CORS(app, origins="*")
 
 app.config['MAX_CONTENT_LENGTH'] = 32 * 1024 * 1024
-app.config['TEMP_UPLOAD_DIR'] = os.environ.get('TEMP_UPLOAD_DIR', 'temp_uploads')
+app.config['TEMP_UPLOAD_DIR'] = os.environ.get('TEMP_UPLOAD_DIR', os.path.join(tempfile.gettempdir(), 'temp_uploads'))
 
-os.makedirs(app.config['TEMP_UPLOAD_DIR'], exist_ok=True)
+def get_temp_dir():
+    d = app.config.get('TEMP_UPLOAD_DIR') or os.path.join(tempfile.gettempdir(), 'temp_uploads')
+    os.makedirs(d, exist_ok=True)
+    return d
+
+@app.route('/', methods=['GET'])
+def root_index():
+    return jsonify({
+        'status': 'healthy',
+        'service': 'MalPulse AI-Powered Malware Analysis Platform API',
+        'version': '0.1.0'
+    })
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
@@ -49,7 +63,7 @@ def analyze_file():
     try:
         # Save the uploaded file to a temporary location
         filename = secure_filename(file.filename)
-        temp_dir = tempfile.mkdtemp(dir=app.config['TEMP_UPLOAD_DIR'])
+        temp_dir = tempfile.mkdtemp(dir=get_temp_dir())
         file_path = os.path.join(temp_dir, filename)
         file.save(file_path)
         
@@ -84,7 +98,7 @@ def analyze_multiple_files():
         return jsonify({'error': 'No valid files provided'}), 400
     
     results = []
-    temp_dir = tempfile.mkdtemp(dir=app.config['TEMP_UPLOAD_DIR'])
+    temp_dir = tempfile.mkdtemp(dir=get_temp_dir())
     
     try:
         for file in files:
@@ -134,7 +148,7 @@ def upload_pe_file():
         return jsonify({'error': 'No file selected'}), 400
     
     try:
-        temp_dir = tempfile.mkdtemp(dir=app.config['TEMP_UPLOAD_DIR'])
+        temp_dir = tempfile.mkdtemp(dir=get_temp_dir())
         file_path = os.path.join(temp_dir, secure_filename(file.filename))
         file.save(file_path)
         analysis_result = predict_malware_with_analysis(file_path)
@@ -172,7 +186,7 @@ def upload_pe_batch():
         return jsonify({'error': 'No valid files provided'}), 400
     
     results = []
-    temp_dir = tempfile.mkdtemp(dir=app.config['TEMP_UPLOAD_DIR'])
+    temp_dir = tempfile.mkdtemp(dir=get_temp_dir())
     
     try:
         for file in files:
@@ -235,7 +249,7 @@ def upload_pdf_file():
     file_path = None
     
     try:
-        temp_dir = tempfile.mkdtemp(dir=app.config['TEMP_UPLOAD_DIR'])
+        temp_dir = tempfile.mkdtemp(dir=get_temp_dir())
         filename = secure_filename(file.filename)
         file_path = os.path.join(temp_dir, filename)
         file.save(file_path)
@@ -289,7 +303,7 @@ def upload_pdf_batch():
         return jsonify({'error': 'No valid files provided'}), 400
     
     results = []
-    temp_dir = tempfile.mkdtemp(dir=app.config['TEMP_UPLOAD_DIR'])
+    temp_dir = tempfile.mkdtemp(dir=get_temp_dir())
     
     try:
         for file in files:
@@ -365,7 +379,9 @@ def supported_formats():
         'other': ['All other file types are supported with basic analysis']
     })
 
-json_chatbot = JSONReportChatbot()
+def get_json_chatbot():
+    return JSONReportChatbot()
+
 @app.route('/api/chat/analyze', methods=['POST'])
 def analyze_via_chat():
     try:
@@ -378,6 +394,7 @@ def analyze_via_chat():
             }), 400
         
         analysis_data = data
+        json_chatbot = get_json_chatbot()
         report = json_chatbot.generate_report(analysis_data)
         structured_analysis = json_chatbot.analyze_json_report(analysis_data)
         
@@ -409,7 +426,7 @@ def ask_chatbot():
             }), 400
         
         question = data['question']
-        
+        json_chatbot = get_json_chatbot()
         response = json_chatbot.ask(question)
         
         return jsonify({
@@ -438,7 +455,7 @@ def generate_report():
         if not isinstance(data, dict):
             return jsonify({"error": "Invalid JSON format, expected a dictionary"}), 400
             
-        temp_dir = tempfile.mkdtemp()
+        temp_dir = tempfile.mkdtemp(dir=get_temp_dir())
         output_path = os.path.join(temp_dir, 'report.pdf')
         
         print("Generating security report PDF...")
@@ -475,24 +492,28 @@ def analyze_route():
     if file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
 
-    try:
-        filepath = os.path.join(os.path.join("temp_uploads", file.filename))
-        file.save(filepath)
+    temp_dir = tempfile.mkdtemp(dir=get_temp_dir())
+    filename = secure_filename(file.filename)
+    filepath = os.path.join(temp_dir, filename)
 
+    try:
+        file.save(filepath)
         results = dy_file(filepath)
-        
-        try:
-            os.remove(filepath)
-        except:
-            pass
-        
         return jsonify(results)
     
     except Exception as e:
         return jsonify({
             'error': 'Analysis failed',
             'message': str(e)
-        }), 500   
+        }), 500
+    finally:
+        try:
+            if os.path.exists(filepath):
+                os.remove(filepath)
+            if os.path.exists(temp_dir):
+                os.rmdir(temp_dir)
+        except Exception:
+            pass   
 
 @app.route('/api/human-report', methods=['POST'])
 def human_readable_report():

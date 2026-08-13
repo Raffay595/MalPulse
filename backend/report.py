@@ -1,6 +1,9 @@
 import os
 import json
 import tempfile
+
+os.environ.setdefault('MPLCONFIGDIR', os.path.join(tempfile.gettempdir(), 'matplotlib'))
+
 import pandas as pd
 import seaborn as sns
 from dotenv import load_dotenv
