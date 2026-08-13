@@ -17,6 +17,7 @@ from report import generate_pdf_report
 from hreport import generate_human_readable_report
 from dy import dy_file
 
+# Vercel Flask entrypoint instance
 app = Flask(__name__)
 CORS(app, origins="*")
 
