@@ -15,12 +15,13 @@ load_dotenv()
 api_key = os.getenv("API_KEY_REPORT")
 
 if not api_key:
-    raise ValueError("API_KEY_REPORT key not provided.")
-
-model = ChatGroq(
-    model="llama-3.3-70b-versatile",
-    api_key=api_key
-)
+    logger.warning("API_KEY_REPORT key not provided.")
+    model = None
+else:
+    model = ChatGroq(
+        model="llama-3.3-70b-versatile",
+        api_key=api_key
+    )
 
 def generate_human_readable_report(analysis_json):
     prompt_template = PromptTemplate.from_template("""
@@ -40,7 +41,13 @@ def generate_human_readable_report(analysis_json):
     Use bullet points or numbered lists where appropriate, and ensure the report is easy to read and professional in tone. """)
 
     try:
-        report_chain = prompt_template | model | StrOutputParser()
+        current_model = model
+        if current_model is None:
+            key = os.getenv("API_KEY_REPORT")
+            if not key:
+                raise ValueError("API_KEY_REPORT key not provided.")
+            current_model = ChatGroq(model="llama-3.3-70b-versatile", api_key=key)
+        report_chain = prompt_template | current_model | StrOutputParser()
         report = report_chain.invoke({"analysis_json":json.dumps(analysis_json, indent=2)})
         return report
     except Exception as e:

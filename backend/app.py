@@ -9,13 +9,22 @@ from flask import Flask, request, jsonify
 from flask import send_file
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
-from model import analyze_file_for_malware
-from pe_model import predict_malware_with_analysis
-from pdf_model import analyze_pdf_file
-from chat import MalwareAnalysisChatbot, JSONReportChatbot
-from report import generate_pdf_report
-from hreport import generate_human_readable_report
-from dy import dy_file
+try:
+    from .model import analyze_file_for_malware
+    from .pe_model import predict_malware_with_analysis
+    from .pdf_model import analyze_pdf_file
+    from .chat import MalwareAnalysisChatbot, JSONReportChatbot
+    from .report import generate_pdf_report
+    from .hreport import generate_human_readable_report
+    from .dy import dy_file
+except ImportError:
+    from model import analyze_file_for_malware
+    from pe_model import predict_malware_with_analysis
+    from pdf_model import analyze_pdf_file
+    from chat import MalwareAnalysisChatbot, JSONReportChatbot
+    from report import generate_pdf_report
+    from hreport import generate_human_readable_report
+    from dy import dy_file
 
 # Vercel Flask entrypoint instance
 app = Flask(__name__)

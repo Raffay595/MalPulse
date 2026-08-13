@@ -41,9 +41,10 @@ load_dotenv()
 api_key = os.getenv("API_KEY_MODEL")
 
 if not api_key:
-    raise ValueError("API_KEY_MODEL not set in the environment or .env file")
-
-model = ChatGroq(model="llama-3.3-70b-versatile", api_key=api_key)
+    logger.warning("API_KEY_MODEL not set in environment or .env file.")
+    model = None
+else:
+    model = ChatGroq(model="llama-3.3-70b-versatile", api_key=api_key)
 
 YARA_RULES = r"""
 rule SuspiciousBase64
@@ -1387,7 +1388,10 @@ analysis_template = ChatPromptTemplate.from_messages([
     ("human", "{file_info}")
 ])
 
-analysis_chain = analysis_template | model | StrOutputParser()
+if model is not None:
+    analysis_chain = analysis_template | model | StrOutputParser()
+else:
+    analysis_chain = None
 
 def extract_json_from_text(text):
     """Extract a JSON object from text that might contain additional content."""
@@ -1532,7 +1536,15 @@ def analyze_file_for_malware(file_path):
     try:
         truncated_content = truncate_for_token_limit(file_content)
         
-        analysis_result = analysis_chain.invoke({"file_info": json.dumps(truncated_content, indent=2)})
+        current_chain = analysis_chain
+        if current_chain is None:
+            key = os.getenv("API_KEY_MODEL")
+            if not key:
+                raise ValueError("API_KEY_MODEL not set in environment or .env file.")
+            m = ChatGroq(model="llama-3.3-70b-versatile", api_key=key)
+            current_chain = analysis_template | m | StrOutputParser()
+        
+        analysis_result = current_chain.invoke({"file_info": json.dumps(truncated_content, indent=2)})
         
         try:
             result_json = json.loads(analysis_result)

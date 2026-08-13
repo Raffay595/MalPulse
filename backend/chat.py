@@ -11,12 +11,19 @@ logger = logging.getLogger(__name__)
 
 class MalwareAnalysisChatbot:
     def __init__(self, api_key: Optional[str] = None):
-        self.api_key = api_key or os.getenv("API_KEY_CHAT")
-        if not self.api_key:
-            raise ValueError("Environment variable not passed.")
-        
-        self.client = Groq(api_key=self.api_key)
+        self.api_key = api_key or os.getenv("API_KEY_CHAT") or os.getenv("GROQ_API_KEY")
+        if self.api_key:
+            self.client = Groq(api_key=self.api_key)
+        else:
+            self.client = None
         self.model = "llama3-70b-8192"
+
+    def _ensure_client(self):
+        if not self.client:
+            key = self.api_key or os.getenv("API_KEY_CHAT") or os.getenv("GROQ_API_KEY")
+            if not key:
+                raise ValueError("API_KEY_CHAT environment variable not set.")
+            self.client = Groq(api_key=key)
 
     def generate_report_from_json(self, json_data: Union[Dict, str]) -> str:
         if isinstance(json_data, dict):
@@ -41,6 +48,7 @@ Format your response as a structured report with the following sections:
 Be specific and refer to actual data points from the JSON analysis."""
 
         try:
+            self._ensure_client()
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
@@ -64,6 +72,7 @@ Answer in a clear, helpful, and informative manner. If the question is outside y
 your limitations and suggest appropriate resources or alternative approaches."""
 
         try:
+            self._ensure_client()
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
@@ -104,7 +113,8 @@ Respond ONLY with a valid JSON object in the following exact format (no markdown
 }}"""
 
         try:
-            response = self.client.chat.completions.create(
+            self.base_chatbot._ensure_client()
+            response = self.base_chatbot.client.chat.completions.create(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.1,
