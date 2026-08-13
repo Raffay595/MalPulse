@@ -24,6 +24,8 @@ import {
 import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts"
 import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts"
 
+import SpecularButton from "@/components/SpecularButton"
+
 export default function DashboardPage() {
   const router = useRouter()
   const [scanHistory, setScanHistory] = useState<any[]>([])
@@ -110,12 +112,19 @@ export default function DashboardPage() {
               Welcome back, User! Here's an overview of your security status.
             </p>
           </div>
-          <Button asChild>
-            <Link href="/">
+          <Link href="/">
+            <SpecularButton
+              size="sm"
+              tint="#ef4444"
+              tintOpacity={0.2}
+              lineColor="#ef4444"
+              baseColor="#ef4444"
+              radius={8}
+            >
               <Upload className="mr-2 h-4 w-4" />
               Scan New File
-            </Link>
-          </Button>
+            </SpecularButton>
+          </Link>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -316,12 +325,19 @@ export default function DashboardPage() {
                     <Shield className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <h3 className="text-lg font-medium mb-2">No scan history yet</h3>
                     <p className="text-muted-foreground mb-4">Upload a file to get started with malware analysis</p>
-                    <Button asChild>
-                      <Link href="/">
+                    <Link href="/">
+                      <SpecularButton
+                        size="md"
+                        tint="#4cd7f6"
+                        tintOpacity={0.2}
+                        lineColor="#4cd7f6"
+                        baseColor="#4cd7f6"
+                        radius={10}
+                      >
                         <Upload className="mr-2 h-4 w-4" />
                         Scan Your First File
-                      </Link>
-                    </Button>
+                      </SpecularButton>
+                    </Link>
                   </div>
                 )}
               </CardContent>

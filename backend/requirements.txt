@@ -75,6 +75,13 @@ pypdfium2
 python-dateutil
 python-docx
 python-dotenv
+# python-magic: optional — used for MIME detection with graceful fallback to mimetypes.
+# On Windows: install python-magic-bin (bundles libmagic.dll) instead of python-magic.
+#   pip install python-magic-bin
+# On Linux/macOS: install python-magic and the OS libmagic:
+#   apt-get install libmagic1 && pip install python-magic   (Debian/Ubuntu)
+#   brew install libmagic && pip install python-magic       (macOS)
+# If neither is available, the code falls back to extension-based MIME detection.
 python-magic
 python-pptx
 pytz

@@ -29,6 +29,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { PieChart, BarChart } from "@/components/charts"
+import SpecularButton from "@/components/SpecularButton"
+
 
 interface ScanResult {
   file_info: {
@@ -850,10 +852,10 @@ export default function DynamicAnalysisPage() {
           </ScrollArea>
         </CardContent>
         <CardFooter>
-          <Button onClick={downloadReport} className="ml-auto">
+          <SpecularButton onClick={downloadReport} size="sm" tint="#4cd7f6" tintOpacity={0.2} lineColor="#4cd7f6" baseColor="#4cd7f6" className="ml-auto">
             <Download className="h-4 w-4 mr-2" />
             Download Full Report
-          </Button>
+          </SpecularButton>
         </CardFooter>
       </Card>
     )
@@ -895,10 +897,10 @@ export default function DynamicAnalysisPage() {
                     <p className="text-sm text-muted-foreground text-center mb-4">
                       Drag and drop your file here, or click to browse
                     </p>
-                    <Button onClick={() => fileInputRef.current?.click()}>
+                    <SpecularButton onClick={() => fileInputRef.current?.click()} size="md" tint="#4cd7f6" tintOpacity={0.2} lineColor="#4cd7f6" baseColor="#4cd7f6" radius={10}>
                       <Upload className="h-4 w-4 mr-2" />
                       Select File
-                    </Button>
+                    </SpecularButton>
                     {file && (
                       <div className="mt-4 text-sm">
                         Selected file: <span className="font-medium">{file.name}</span> ({(file.size / 1024).toFixed(2)}{" "}
@@ -908,10 +910,12 @@ export default function DynamicAnalysisPage() {
                   </div>
 
                   {file && !scanning && !scanCompleted && (
-                    <Button className="w-full" onClick={handleScan}>
-                      <Shield className="h-4 w-4 mr-2" />
-                      Analyze File
-                    </Button>
+                    <div className="w-full">
+                      <SpecularButton className="w-full" onClick={handleScan} size="md" tint="#ef4444" tintOpacity={0.2} lineColor="#ef4444" baseColor="#ef4444" radius={10}>
+                        <Shield className="h-4 w-4 mr-2" />
+                        Analyze File
+                      </SpecularButton>
+                    </div>
                   )}
 
                   {scanning && (
@@ -994,10 +998,12 @@ export default function DynamicAnalysisPage() {
                       </Button>
                     ))}
 
-                    <Button variant="outline" className="w-full mt-4" onClick={clearHistory}>
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Clear History
-                    </Button>
+                    <div className="mt-4">
+                      <SpecularButton onClick={clearHistory} size="sm" tint="#ef4444" tintOpacity={0.15} lineColor="#ef4444" baseColor="#ef4444" textColor="#ef4444" radius={8} className="w-full">
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Clear History
+                      </SpecularButton>
+                    </div>
                   </div>
                 ) : (
                   <div className="text-center py-6">

@@ -17,7 +17,7 @@ export default function VoiceAssistantPage() {
       id: "welcome",
       role: "assistant",
       content:
-        "Hello! I'm your ThreatShield voice assistant. You can ask me questions about cybersecurity by clicking the microphone button. How can I help you today?",
+        "Hello! I'm your MalPulse voice assistant. You can ask me questions about cybersecurity by clicking the microphone button. How can I help you today?",
       timestamp: new Date(),
     },
   ])

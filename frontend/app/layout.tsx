@@ -11,7 +11,7 @@ const inter = Inter({
 })
 
 export const metadata = {
-  title: "ThreatShield - Advanced Malware Detection",
+  title: "MalPulse - Advanced Malware Detection",
   description: "Scan files for potential threats and get detailed analysis in seconds.",
   icons: {
     icon: "/favicon.svg"

@@ -3,7 +3,7 @@ import json
 import logging
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
-from langchain.schema import StrOutputParser
+from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

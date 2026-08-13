@@ -32,6 +32,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
+import SpecularButton from "@/components/SpecularButton"
+
 export default function HistoryPage() {
   const [history, setHistory] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -148,10 +150,20 @@ export default function HistoryPage() {
           </div>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive" className="gap-2">
-                <Trash2 className="h-4 w-4" />
-                Clear History
-              </Button>
+              <div>
+                <SpecularButton
+                  size="sm"
+                  tint="#ef4444"
+                  tintOpacity={0.2}
+                  lineColor="#ef4444"
+                  baseColor="#ef4444"
+                  textColor="#ef4444"
+                  radius={8}
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Clear History
+                </SpecularButton>
+              </div>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
@@ -179,9 +191,18 @@ export default function HistoryPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Button variant="outline" onClick={() => setSearchTerm("")}>
+          <SpecularButton
+            size="sm"
+            tint="#4cd7f6"
+            tintOpacity={0.1}
+            lineColor="#4cd7f6"
+            baseColor="#4cd7f6"
+            textColor="#94a3b8"
+            radius={8}
+            onClick={() => setSearchTerm("")}
+          >
             Clear Filters
-          </Button>
+          </SpecularButton>
         </div>
 
         <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
@@ -211,11 +232,21 @@ export default function HistoryPage() {
                   ? "No results match your search criteria. Try a different search term."
                   : "You haven't scanned any files yet. Upload a file to get started."}
               </p>
-              <Button asChild>
-                <Link href="/">Scan a File</Link>
-              </Button>
+              <Link href="/">
+                <SpecularButton
+                  size="md"
+                  tint="#4cd7f6"
+                  tintOpacity={0.2}
+                  lineColor="#4cd7f6"
+                  baseColor="#4cd7f6"
+                  radius={10}
+                >
+                  Scan a File
+                </SpecularButton>
+              </Link>
             </CardContent>
           </Card>
+
         ) : (
           <div className="grid gap-4">
             {filteredHistory.map((item) => (

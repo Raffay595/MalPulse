@@ -21,7 +21,7 @@ export default function ChatbotPage() {
       id: "welcome",
       role: "assistant",
       content:
-        "Hello! I'm your ThreatShield AI assistant. I can answer questions about malware, cybersecurity threats, and help you understand analysis results. How can I help you today?",
+        "Hello! I'm your MalPulse AI assistant. I can answer questions about malware, cybersecurity threats, and help you understand analysis results. How can I help you today?",
       timestamp: new Date(),
     },
   ])
@@ -245,7 +245,7 @@ export default function ChatbotPage() {
               <ShieldAlert className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">ThreatShield AI Assistant</h1>
+              <h1 className="text-3xl font-bold tracking-tight">MalPulse AI Assistant</h1>
               <p className="text-muted-foreground">Ask questions about malware, threats, and cybersecurity</p>
             </div>
           </div>

@@ -62,8 +62,11 @@ def analyze_file():
         return jsonify(result)
     
     except Exception as e:
+        import traceback
+        error_msg = str(e) if str(e) and str(e) != 'None' else type(e).__name__
+        print(f"[ERROR] Analysis failed: {error_msg}\n{traceback.format_exc()}")
         return jsonify({
-            'error': f'Analysis failed: {str(e)}',
+            'error': f'Analysis failed: {error_msg}',
             'file_name': file.filename if file else 'Unknown'
         }), 500
 

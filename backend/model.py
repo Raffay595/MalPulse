@@ -1,6 +1,4 @@
-from langchain_groq import ChatGroq
-from langchain.prompts import ChatPromptTemplate
-from langchain.schema import StrOutputParser
+import logging
 import json
 import os
 import mimetypes
@@ -8,22 +6,36 @@ import base64
 import re
 import olefile
 import hashlib
-import magic
 import pdfplumber
 import io
 import zipfile
 import struct
-import yara
 import math
 import docx
 import binascii
-import logging
 from dotenv import load_dotenv
+
+from langchain_groq import ChatGroq
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 logging.getLogger('pdfminer.pdfpage').setLevel(logging.ERROR)
 logging.getLogger("api.groq").setLevel(logging.WARNING)
+
+try:
+    import magic as _magic_lib
+    _MAGIC_AVAILABLE = True
+except (ImportError, OSError):
+    _magic_lib = None
+    _MAGIC_AVAILABLE = False
+    logger.warning("python-magic/libmagic not available — falling back to mimetypes for MIME detection")
+
+try:
+    import yara  # type: ignore
+except (ImportError, OSError):
+    yara = None
 
 load_dotenv()
 api_key = os.getenv("API_KEY_MODEL")
@@ -68,8 +80,11 @@ rule SuspiciousJavascript
 """
 
 try:
-    yara_rules = yara.compile(source=YARA_RULES)
-except:
+    if yara is not None:
+        yara_rules = yara.compile(source=YARA_RULES)
+    else:
+        yara_rules = None
+except Exception:
     logger.warning("YARA not available, skipping YARA rule compilation")
     yara_rules = None
 
@@ -1182,18 +1197,31 @@ def extract_apk_content(file_path):
     
     return results
 
+def _detect_mime(file_path: str, extension: str):
+    """Detect MIME type and file description, with graceful fallback."""
+    if _MAGIC_AVAILABLE:
+        try:
+            mime_type = _magic_lib.Magic(mime=True).from_file(file_path)
+            file_type_desc = _magic_lib.Magic().from_file(file_path)
+            return mime_type, file_type_desc
+        except Exception as e:
+            logger.warning(
+                "libmagic detection failed (%s: %s) — falling back to mimetypes",
+                type(e).__name__, e or "no detail"
+            )
+    # Fallback: extension + mimetypes
+    guessed = mimetypes.guess_type(file_path)[0]
+    mime_type = guessed or 'application/octet-stream'
+    file_type_desc = f"Based on extension: {extension or 'unknown'}"
+    return mime_type, file_type_desc
+
+
 def extract_file_content(file_path):
     """Extract content from different file types for analysis."""
     file_name = os.path.basename(file_path)
     extension = os.path.splitext(file_path)[1].lower()
-    
-    try:
-        import magic
-        mime_type = magic.Magic(mime=True).from_file(file_path)
-        file_type_desc = magic.Magic().from_file(file_path)
-    except ImportError:
-        mime_type = mimetypes.guess_type(file_path)[0] or 'unknown/unknown'
-        file_type_desc = f"Based on extension: {extension}"
+
+    mime_type, file_type_desc = _detect_mime(file_path, extension)
     
     hashes = get_file_hashes(file_path)
     
@@ -1522,12 +1550,10 @@ def analyze_file_for_malware(file_path):
                 }
             
     except Exception as e:
-        logger.error(f"Error during analysis: {str(e)}")
-        return {
-            "file_name": file_content["file_name"],
-            "is_malicious": "unknown",
-            "error": str(e)
-        }
+        import traceback
+        error_msg = str(e) if str(e) and str(e) != 'None' else type(e).__name__
+        logger.error(f"Error during analysis: {error_msg}\n{traceback.format_exc()}")
+        raise RuntimeError(f"LLM analysis failed ({error_msg})")
 
 def analyze_directory(directory_path, output_file=None):
     results = []

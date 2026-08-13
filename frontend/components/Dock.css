@@ -1,0 +1,96 @@
+.dock-outer {
+  margin: 0;
+  display: flex;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.dock-panel {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  width: fit-content;
+  gap: 0.625rem;
+  border-radius: 1.25rem;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(76, 215, 246, 0.12);
+  padding: 0.5rem 0.75rem 0.625rem;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(76, 215, 246, 0.06);
+}
+
+.dock-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.875rem;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dock-item:hover {
+  background: rgba(76, 215, 246, 0.08);
+  border-color: rgba(76, 215, 246, 0.25);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.4),
+    0 0 12px rgba(76, 215, 246, 0.15),
+    0 0 0 1px rgba(76, 215, 246, 0.1) inset;
+}
+
+.dock-item.dock-item--active {
+  background: rgba(76, 215, 246, 0.12);
+  border-color: rgba(76, 215, 246, 0.45);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.4),
+    0 0 18px rgba(76, 215, 246, 0.25),
+    0 0 0 1px rgba(76, 215, 246, 0.15) inset;
+}
+
+.dock-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(148, 163, 184, 0.85);
+  transition: color 0.2s ease;
+}
+
+.dock-item:hover .dock-icon,
+.dock-item.dock-item--active .dock-icon {
+  color: #4cd7f6;
+}
+
+.dock-label {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  width: max-content;
+  white-space: pre;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(76, 215, 246, 0.35);
+  background: rgba(12, 19, 36, 0.95);
+  backdrop-filter: blur(12px);
+  padding: 0.25rem 0.65rem;
+  font-size: 0.725rem;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  color: #4cd7f6;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.6),
+    0 0 10px rgba(76, 215, 246, 0.2);
+  pointer-events: none;
+  z-index: 50;
+  transform: translateX(-50%);
+}
+

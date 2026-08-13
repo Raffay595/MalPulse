@@ -52,7 +52,7 @@ setup(
     entry_points={
         "console_scripts": [
             "malware-detect = malware_detector.cli:main",
-            "malware-detect-Threatshield = malware_detector.cli:main",
+            "malware-detect-MalPulse = malware_detector.cli:main",
         ],
     },
     author="Viraj",

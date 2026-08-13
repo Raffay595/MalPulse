@@ -12,6 +12,8 @@ import type { PEAnalysisResult } from "@/lib/types"
 import SummaryTab from "@/components/analysis/summary-tab"
 import FeaturesTab from "@/components/analysis/features-tab"
 import DetailedAnalysisTab from "@/components/analysis/detailed-analysis-tab"
+import SpecularButton from "@/components/SpecularButton"
+
 
 export default function PEAnalysisPage() {
   const searchParams = useSearchParams()
@@ -186,25 +188,28 @@ export default function PEAnalysisPage() {
               <FileWarning className="h-3.5 w-3.5" />
               <span>PE File</span>
             </Badge>
-            <Button 
-              variant="outline" 
+            <SpecularButton 
               size="sm" 
-              className="gap-1.5" 
+              tint="#4cd7f6"
+              tintOpacity={0.2}
+              lineColor="#4cd7f6"
+              baseColor="#4cd7f6"
+              radius={8}
               onClick={handleDownloadReport}
               disabled={isGeneratingReport}
             >
               {isGeneratingReport ? (
                 <>
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent mr-1"></div>
                   <span>Generating...</span>
                 </>
               ) : (
                 <>
-                  <Download className="h-4 w-4" />
+                  <Download className="h-4 w-4 mr-1" />
                   <span>Report</span>
                 </>
               )}
-            </Button>
+            </SpecularButton>
           </div>
         </div>
 
